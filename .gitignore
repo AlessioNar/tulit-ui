@@ -1,0 +1,4 @@
+database/*
+!database/queries
+!database/data/akn
+**/__pycache__/**
