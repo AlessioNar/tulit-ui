@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "tulit"
+version = "0.1.0"
+description = ""
+authors = ["AlessioNar <alessio.nardin@gmail.com>"]
+license = "EUPL1.2"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pandas = "^2.2.3"
+streamlit = "^1.39.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
