@@ -12,9 +12,12 @@ def export():
     """
     Export articles to JSON
     """
-    st.title("Export to JSON")
+    st.sidebar.write(f"**Selected Format:** {st.session_state.get('format', 'Not selected')}")
+    st.sidebar.write(f"**Selected File:** {st.session_state.get('file', 'No file selected')}")
+
+    st.title("Export data")
     # Check for data in session state
-    if 'data' not in st.session_state or not st.session_state.data:
+    if 'data' not in st.session_state:
         st.warning("No data available to export")
         return
     
@@ -22,16 +25,16 @@ def export():
     # Assuming data is a list of dictionaries or a DataFrame
     data = st.session_state.data 
     
-      
     # Display preview of articles
     st.write("### Data Preview")
-    
+    table = st.dataframe(data)  # Use `st.dataframe` for an interactive table
+
     
     # Named based on
-    celex = st.text_input(
-                "Insert here the CELEX ID",
+    file_name = st.text_input(
+                "Name of the file",
                 placeholder="ex. 32024R0903",
-                value='32024R0903'
+                value='document'
             )
     
     # Create TXT Directory
@@ -41,34 +44,31 @@ def export():
     
     txt_files = []
     if st.button("Export"):
-        document_path = os.path.join(export_dir, celex)
+        document_path = os.path.join(export_dir, file_name)
         os.makedirs(document_path, exist_ok=True) 
         # Handle different data types
         try:
-            # If data is a list of simple values
-            if isinstance(data, list):
-                for index, item in enumerate(data):
-                    filename = f"document_{index+1}.txt"
-                    filepath = os.path.join(export_dir, filename)
-                    
-                    with open(filepath, 'w', encoding='utf-8') as f:
-                        f.write(str(item))
-                    
-                    txt_files.append(filepath)
-            
-            # If data is a dictionary
-            elif isinstance(data, dict):
-                for key, value in data.items():
-                    filename = f"{key}.txt"
-                    filepath = os.path.join(export_dir, filename)
-                    
-                    with open(filepath, 'w', encoding='utf-8') as f:
-                        f.write(str(value))
-                    
-                    txt_files.append(filepath)
+            for index, item in data.iterrows():
+                # Determine filename based on 'Paragraph ID' or fallback to 'Article eId'
+                if pd.notna(item.get('eId')):  # Check for valid 'Paragraph ID'
+                    filename = f"{item['eId']}.txt"
+                    content = str(item.get('Paragraph Text', ''))  # Default to empty if missing
+                else:
+                    filename = f"{item.get('eId', index)}.txt"  # Fallback to index if 'Article eId' missing
+                    content = str(item.get('Article Text', ''))  # Default to empty if missing
+
+                # Construct file path
+                filepath = os.path.join(export_dir, filename)
+
+                # Write content to file
+                with open(filepath, 'w', encoding='utf-8') as f:
+                    f.write(content)
+
+                # Track the generated file
+                txt_files.append(filepath)
                 
             # Create ZIP file
-            zip_path = os.path.join(document_path, "exported_documents.zip")
+            zip_path = os.path.join(document_path, f"{file_name}zip")
             with zipfile.ZipFile(zip_path, 'w') as zipf:
                 for file in txt_files:
                     zipf.write(file, os.path.basename(file))
@@ -78,7 +78,7 @@ def export():
                 st.download_button(
                         label="Download Exported Files",
                         data=f.read(),
-                        file_name="exported_documents.zip",
+                        file_name=f"{file_name}.zip",
                         mime="application/zip"
                     )
                     

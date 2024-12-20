@@ -15,8 +15,11 @@ def choose_file():
     """
     Main Streamlit app for file system navigation and file selection.
     """
-    st.title("File System Navigator and Content Viewer")
+    st.title("Choose a file")
     
+    st.sidebar.write(f"**Current Path:** {st.session_state.get('current_path', 'Not set')}")
+    st.sidebar.write(f"**Selected File:** {st.session_state.get('file', 'No file selected')}")
+
         
     # Navigation buttons
     st.write("### Navigation")    
@@ -50,23 +53,17 @@ def choose_file():
                 if st.button(f"📄 {entry['Name']}", key=f"{entry['Path']}_{idx}"):
                     st.write("Selected file: ", entry['Path'])
                     st.session_state.file = entry['Path']
+                    # Proceed to view results
+        if st.session_state.get('file') and st.button("Proceed to parse file"):
+            st.switch_page("pages/3_Parse.py")
             
     else:
         st.warning("No files or directories found in the current folder.")
+    if 'file' not in st.session_state or not st.session_state.file:
+        st.warning("Please select a file first ")
+        st.stop()
+
         
-    format_selected = st.selectbox("Select a file format:", ["Formex 4", "XHTML", "Akoma Ntoso"], key="format_select")
-    if format_selected == 'Formex 4':
-        st.session_state.format = 'Formex 4'
-        st.write("Format selected: ", st.session_state.format)
-
-    elif format_selected == 'XHTML':    
-        st.session_state.format = 'XHTML'
-        st.write("Format selected: ", st.session_state.format)
-
-    elif format_selected == 'Akoma Ntoso':
-        st.session_state.format = 'Akoma Ntoso'
-        st.write("Format selected: ", st.session_state.format)
-
 
     
 def list_files_and_dirs(path):
@@ -96,6 +93,7 @@ def list_files_and_dirs(path):
     except Exception as e:
         st.error(f"Error accessing directory: {e}")
         return []
+    
 
 def main():
     choose_file()
