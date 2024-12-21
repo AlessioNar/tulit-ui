@@ -16,6 +16,9 @@ def parse_file(parser_cls, file_path):
 
 def parse():
     """Parser Page"""
+    
+    st.write("# TULIT")
+
     st.title("Parse the file")
 
     # Sidebar info
@@ -58,7 +61,12 @@ def parse():
 
             # Verify the parser output
             if parser.valid is None or parser.valid is False:
+                # Print the error message prettified                
+                for error in parser.validation_errors:
+                    st.error(f"Validation Error: {error}")
+                    
                 raise RuntimeError("Parser failed or returned invalid data.")
+            
 
             # Store parsed data in session state
             st.session_state.parser = parser

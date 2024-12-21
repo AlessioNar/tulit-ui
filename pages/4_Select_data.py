@@ -80,13 +80,16 @@ def view():
     parser = st.session_state.parser  # Retrieve the parser object
     format_selected = st.session_state.format  # Get selected format
     st.write("### Preface")
-    st.write(getattr(parser, "preface", "No preface available."))  # Display preface if available
+    if hasattr(parser, "preface") and parser.preface is not None:
+        st.write(getattr(parser, "preface"))  # Display preface if available
+    else:
+        st.info("No preface found in this document.")
 
     # Attribute selection dropdown
     st.write("## Select Data to Visualize")
     view_option = st.selectbox(
         "Choose an attribute to view:",
-        ["Recitals", "Citations", "Articles", "Chapters"],
+        ["Citations", "Recitals",  "Articles", "Chapters"],
         key="view_option_select"
     )
 
@@ -105,17 +108,17 @@ def view():
         else:
             st.info("No chapters data available in this document.")
     elif view_option == "Recitals":
-        if hasattr(parser, 'recitals'):
+        if hasattr(parser, 'recitals') and parser.recitals is not None:
             recitals_data = extract_recitals(parser.recitals)
             display_table(recitals_data, table_type="Recitals")
         else:
             st.info("No recitals data available in this document.")
     elif view_option == "Citations":
-        if hasattr(parser, 'citations'):
+        if hasattr(parser, 'citations') and parser.citations is not None:
             citations_data = extract_citations(parser.citations)
             display_table(citations_data, table_type="Citations")
         else:
-            st.info("No recitals data available in this document.")
+            st.info("No citations data available in this document.")
         
     if st.session_state.get('data') is not None and not st.session_state['data'].empty:
         if st.button("Proceed to export data"):

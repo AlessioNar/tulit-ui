@@ -1,21 +1,15 @@
 import os
 import streamlit as st
 from datetime import datetime
-import shutil
-import tempfile
-import pandas as pd
-
-# Dummy function to simulate calling a parser
-from ulit.parsers.formex import Formex4Parser  # Replace with actual import
-from ulit.parsers.html import HTMLParser
-from ulit.parsers.akomantoso import AkomaNtosoParser
-
 
 def choose_file():
     """
     Main Streamlit app for file system navigation and file selection.
     """
-    st.title("Choose a file")
+    
+    st.write("# TULIT")
+
+    st.header("Choose a File for Parsing")
     
     st.sidebar.write(f"**Current Path:** {st.session_state.get('current_path', 'Not set')}")
     st.sidebar.write(f"**Selected File:** {st.session_state.get('file', 'No file selected')}")
@@ -26,10 +20,10 @@ def choose_file():
 
     # Initialize session state for current path
     if 'current_path' not in st.session_state:
-        st.session_state.current_path = os.path.expanduser('./database/data/')
+        st.session_state.current_path = os.path.join(os.path.dirname(__file__), '..', 'database', 'data')
         st.rerun()
     else:        
-        if st.button("Go Up One Directory"):
+        if st.button("Go Up"):
             st.session_state.current_path = os.path.dirname(st.session_state.current_path)
             st.rerun()
     # Display current directory
@@ -62,8 +56,6 @@ def choose_file():
     if 'file' not in st.session_state or not st.session_state.file:
         st.warning("Please select a file first ")
         st.stop()
-
-        
 
     
 def list_files_and_dirs(path):
