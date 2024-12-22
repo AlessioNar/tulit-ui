@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 from ulit.sparql import send_sparql_query
-from ulit.download import download_documents
+from ulit.download.cellar import CellarDownloader
+from ulit.download.normattiva import NormattivaDownloader
 import os
 
 def download():
@@ -20,22 +21,23 @@ def download():
             placeholder="ex. 32024R0903"
         )
         format_options = ["Formex 4", "XHTML"]
+        st.session_state.format = st.selectbox("Select the format of the document", format_options)
+    
     elif source == "Normattiva":
-        celex = None
-        date = st.date_input("Select Date")
-        official_journal = st.text_input("Official Journal", placeholder="Enter the Official Journal")
-        format_options = ["PDF", "DOCX"]  # Example formats for Normattiva
-
-    if 'format' not in st.session_state:
-        st.session_state.format = None
-
-    st.session_state.format = st.selectbox("Select a file format:", format_options)
+        publication_date = st.text_input("Insert the publication date of the document", placeholder="Enter the publication date in the format YYYYMMDD")
+        codice_redazionale = st.text_input("Codice Redazionale", placeholder="Enter the Codice Redazionale of the document")
 
     if st.button("Search", key="search"):
         if source == "Publications Office of the EU":
+            if not celex:
+                st.error("Please enter a CELEX number")
+                st.stop()
             handle_eu_publications_office(celex)
         elif source == "Normattiva":
-            handle_normattiva(date, official_journal)
+            if not publication_date or not codice_redazionale:
+                st.error("Please enter the publication date and the Codice Redazionale")
+                st.stop()
+            handle_normattiva(publication_date, codice_redazionale)
 
 def handle_eu_publications_office(celex):
     if celex not in st.session_state:
@@ -45,22 +47,22 @@ def handle_eu_publications_office(celex):
     query_file = './database/queries/formex_query.rq' if st.session_state.format == "Formex 4" else './database/queries/html_query.rq'
     results = send_sparql_query(query_file, celex)
     format_dir = 'formex' if st.session_state.format == "Formex 4" else 'html'
-    downloaded_document_paths = download_documents(
-        results,
-        f'./database/data/{format_dir}',
-        log_dir='./database/metadata/logs',
-        format='fmx4' if st.session_state.format == "Formex 4" else 'xhtml'
+    downloader = CellarDownloader(download_dir=f'./database/data/{format_dir}', log_dir='./database/metadata/logs')
+    
+    downloaded_document_paths = downloader.download(
+        results, format='fmx4' if st.session_state.format == "Formex 4" else 'xhtml'
     )
     display_download_results(downloaded_document_paths)
 
-def handle_normattiva(date, official_journal):
-    st.write(f'Searching and downloading file from {official_journal} on {date}')
-    # Add your search logic here for Normattiva
+def handle_normattiva(publication_date, codice_redazionale):
+    st.write(f'Searching and downloading file from Normattiva with Codice Redazionale {codice_redazionale} and published on {publication_date}')
+    downloader = NormattivaDownloader(download_dir='./database/data/akn/italy', log_dir='./database/metadata/logs')
+    downloaded_document_paths = downloader.download(publication_date, codice_redazionale)
+    display_download_results(downloaded_document_paths)
 
 def display_download_results(downloaded_document_paths):
     st.session_state.downloaded_document_paths = downloaded_document_paths
     st.session_state.documents = {
-        "celex": st.session_state.celex,
         "documents": st.session_state.downloaded_document_paths
     }
     st.write(f'{len(st.session_state.downloaded_document_paths)} documents downloaded in {st.session_state.downloaded_document_paths}')
