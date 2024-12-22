@@ -3,6 +3,7 @@ import pandas as pd
 from ulit.sparql import send_sparql_query
 from ulit.download.cellar import CellarDownloader
 from ulit.download.normattiva import NormattivaDownloader
+from ulit.download.legilux import LegiluxDownloader
 import os
 
 def download():
@@ -13,7 +14,7 @@ def download():
 
     # Sidebar for selecting the source
     st.sidebar.header("Select Source")
-    source = st.sidebar.selectbox("Choose the source of the file download:", ["Publications Office of the EU", "Normattiva"])
+    source = st.sidebar.selectbox("Choose the source of the file download:", ["Publications Office of the EU", "Normattiva", "Legilux"])
 
     if source == "Publications Office of the EU":
         celex = st.text_input(
@@ -26,6 +27,10 @@ def download():
     elif source == "Normattiva":
         publication_date = st.text_input("Insert the publication date of the document", placeholder="Enter the publication date in the format YYYYMMDD")
         codice_redazionale = st.text_input("Codice Redazionale", placeholder="Enter the Codice Redazionale of the document")
+    
+    elif source == "Legilux":
+        eli = st.text_input("Please introduce the ELI number of the document you want to download", placeholder="ex. http://data.legilux.public.lu/eli/etat/leg/loi/2006/07/31/n2/jo")
+        
 
     if st.button("Search", key="search"):
         if source == "Publications Office of the EU":
@@ -38,6 +43,11 @@ def download():
                 st.error("Please enter the publication date and the Codice Redazionale")
                 st.stop()
             handle_normattiva(publication_date, codice_redazionale)
+        elif source == "Legilux":
+            if not eli:
+                st.error("Please enter an ELI number")
+                st.stop()
+            handle_legilux(eli)
 
 def handle_eu_publications_office(celex):
     if celex not in st.session_state:
@@ -60,13 +70,16 @@ def handle_normattiva(publication_date, codice_redazionale):
     downloaded_document_paths = downloader.download(publication_date, codice_redazionale)
     display_download_results(downloaded_document_paths)
 
+def handle_legilux(eli):
+    st.write(f'Searching and downloading file from Legilux with ELI {eli}')
+    downloader = LegiluxDownloader(download_dir='./database/data/akn/luxembourg', log_dir='./database/metadata/logs')
+    downloaded_document_paths = downloader.download(eli)
+    display_download_results(downloaded_document_paths)
+
 def display_download_results(downloaded_document_paths):
-    st.session_state.downloaded_document_paths = downloaded_document_paths
-    st.session_state.documents = {
-        "documents": st.session_state.downloaded_document_paths
-    }
-    st.write(f'{len(st.session_state.downloaded_document_paths)} documents downloaded in {st.session_state.downloaded_document_paths}')
-    st.session_state.file = st.session_state.downloaded_document_paths
+    st.session_state.documents = downloaded_document_paths
+    st.write(f'{len(st.session_state.documents)} documents downloaded in {st.session_state.documents}')
+    st.session_state.file = st.session_state.documents
 
 
 def main():
