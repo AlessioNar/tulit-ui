@@ -4,9 +4,9 @@ import tempfile
 import streamlit as st
 
 # Dummy parsers - replace these imports with your actual parsers
-from ulit.parsers.formex import Formex4Parser
-from ulit.parsers.html import HTMLParser
-from ulit.parsers.akomantoso import AkomaNtosoParser
+from tulit.parsers.formex import Formex4Parser
+from tulit.parsers.html import HTMLParser
+from tulit.parsers.akomantoso import AkomaNtosoParser
 
 def parse_file(parser_cls, file_path):
     """Parse the file using the given parser class."""

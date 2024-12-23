@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
-from ulit.sparql import send_sparql_query
-from ulit.download.cellar import CellarDownloader
-from ulit.download.normattiva import NormattivaDownloader
-from ulit.download.legilux import LegiluxDownloader
+from tulit.sparql import send_sparql_query
+from tulit.download.cellar import CellarDownloader
+from tulit.download.normattiva import NormattivaDownloader
+from tulit.download.legilux import LegiluxDownloader
 import os
 
 def download():
