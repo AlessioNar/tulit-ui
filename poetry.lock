@@ -459,6 +459,29 @@ files = [
 ]
 
 [[package]]
+name = "genbadge"
+version = "1.1.1"
+description = "Generate badges for tools that do not provide one."
+optional = false
+python-versions = "*"
+files = [
+    {file = "genbadge-1.1.1-py2.py3-none-any.whl", hash = "sha256:c8b67ccdad2867434cdc0be7c4bd3f6af6003c466d8ff5013b8b5842ca8730de"},
+    {file = "genbadge-1.1.1.tar.gz", hash = "sha256:12cdaaacbc9e0ea3164bf580cfb87ec61ff17ae0728f09a7f0102f8ab3112f4c"},
+]
+
+[package.dependencies]
+click = ">7.0"
+pillow = "*"
+requests = "*"
+setuptools = "*"
+
+[package.extras]
+all = ["defusedxml", "flake8-html"]
+coverage = ["defusedxml"]
+flake8 = ["flake8-html"]
+tests = ["defusedxml"]
+
+[[package]]
 name = "gitdb"
 version = "4.0.11"
 description = "Git Object Database"
@@ -2245,19 +2268,20 @@ telegram = ["requests"]
 
 [[package]]
 name = "tulit"
-version = "0.0.2"
+version = "0.0.3"
 description = "TULIT - The Universal Legal Informatics Toolkit, is set of legal informatics utilities collected in a Python package that focuses on the retrieval of legal data and metadata from official sources in the EU, and their transformation in pythonic data structures"
 optional = false
 python-versions = "<4.0,>=3.11"
 files = [
-    {file = "tulit-0.0.2-py3-none-any.whl", hash = "sha256:50298697bc752648ffac5da569daa198387a530d1030ae797ca07bfe62f1dc2d"},
-    {file = "tulit-0.0.2.tar.gz", hash = "sha256:9666b5f6d96f78e0d1af77c639a587d6aa440d32041ed677ab077c8bbc501005"},
+    {file = "tulit-0.0.3-py3-none-any.whl", hash = "sha256:cab2faebb3192bd726ec8297bdd43ee628c6d34ca56d93cda84503076dd14e50"},
+    {file = "tulit-0.0.3.tar.gz", hash = "sha256:42ca30a9500f63ee0bd375141027f4e9e271e281b87b5444fd85e4b7c92202b5"},
 ]
 
 [package.dependencies]
 beautifulsoup4 = ">=4.12.3,<5.0.0"
 chardet = ">=5.2.0,<6.0.0"
 coverage = ">=7.6.9,<8.0.0"
+genbadge = ">=1.1.1,<2.0.0"
 lxml = ">=5.3.0,<6.0.0"
 pandas = ">=2.2.3,<3.0.0"
 pytest = ">=8.3.3,<9.0.0"
@@ -2477,4 +2501,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "a420013b41794ab481f27fe4b84d7ab2a85d9b2b6a7c5864c449dbb30b931b7a"
+content-hash = "0f8bc75c87f97344fe01cf8c5f6c51505271800bdff34fa203afce333451f844"
