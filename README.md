@@ -1,6 +1,8 @@
-# Tulit-UI
+# TULIT-UI
 
-Tulit-UI is a Streamlit application designed for legal informatics. It provides tools for retrieving and parsing legal documents efficiently.
+TULIT-UI is a Streamlit application designed for legal informatics. It provides tools for retrieving and parsing legal documents efficiently.
+
+A demo of the application can be found [here](https://tulit-ui.streamlit.app)
 
 ## Features
 
