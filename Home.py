@@ -79,15 +79,11 @@ def main():
             """
             ## Contact
             
-            If you have any questions, suggestions, or feedback, feel free to reach out to us. We're always happy to hear from our users and contributors.
+            If you have any questions, suggestions, or feedback, feel free to reach out. 
             
-            ### Contact Information
-            - **Email**: support@tulit.org
-            - **GitHub**: [TULIT Repository](https://github.com/your-repo/tulit)
-            - **Twitter**: [@TULIT_Toolkit](https://twitter.com/TULIT_Toolkit)
-            
-            ### Join Our Community
-            Connect with other users and contributors on our [Discord server](https://discord.gg/your-invite-link) to discuss ideas, share knowledge, and collaborate on the project.
+            ### Contact Information            
+            - **GitHub**: [TULIT Repository](https://github.com/AlessioNar/tulit)
+        
             """
         )
 
