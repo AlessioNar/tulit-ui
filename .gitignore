@@ -1,4 +1,7 @@
-database/*
-!database/queries
-!database/data/akn
+database/data/akn/
+database/data/formex
+database/data/html
+database/data/json
+database/data/txt
+
 **/__pycache__/**
