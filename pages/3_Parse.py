@@ -84,7 +84,7 @@ def parse():
 
     # Proceed to view results
     if st.session_state.get('parser') and st.button("Proceed to View Results"):
-        st.switch_page("pages/4_Select_data.py")
+        st.switch_page("pages/4_Visualise.py")
 
 def main():
     if "parser" not in st.session_state:

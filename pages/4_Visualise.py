@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import shutil
+import json
 
 def display_table(data, table_type="Articles"):
     """Display a table (articles, chapters, or other attributes)."""
@@ -16,12 +16,16 @@ def display_table(data, table_type="Articles"):
 def extract_articles(articles_data):
     """Extract and format articles/paragraphs."""
     data_list = []
-    for article in articles_data:                
-        data_list.append({
-            'eId': article['eId'],
-            'Article Number': article['num'],
-            'Article Heading': article['heading']
-        })
+    for article in articles_data:
+        for child in article.get('children', []):            
+            data_list.append({
+                'eId': child['eId'],
+                'Child': child['text'],
+                'Article eId': article['eId'],
+                'Article Number': article['num'],
+                'Article Heading': article['heading'],
+                
+            })
     return data_list
 
 def extract_chapters(chapters_data):
@@ -48,7 +52,7 @@ def extract_items(data):
 
 def view():
     """View Data Page"""
-    st.title("Select Data")
+    st.title("Visualise")
     
     # Sidebar info
     st.sidebar.write(f"**Selected Format:** {st.session_state.get('format', 'Not selected')}")    
@@ -58,7 +62,7 @@ def view():
     if 'parser' not in st.session_state or not st.session_state.parser:
         st.error("No parsed data found. Please parse a file first.")
         st.stop()
-
+        
     parser = st.session_state.parser  # Retrieve the parser object
     st.write("### Preface")
     if hasattr(parser, "preface") and parser.preface is not None:
@@ -67,7 +71,7 @@ def view():
         st.info("No preface found in this document.")
 
     # Attribute selection dropdown
-    st.write("## Select Data to Visualize")
+    st.write("## Explore parsed data")
     view_option = st.selectbox(
         "Choose an attribute to view:",
         ["Citations", "Recitals",  "Articles", "Chapters"],
@@ -99,7 +103,32 @@ def view():
             display_table(citations_data, table_type="Citations")
         else:
             st.info("No citations data available in this document.")
-        
+    
+    st.write("## Export Data")
+    
+    # Text input for the name of the file
+    file_to_download = st.text_input(
+        "Name of the file",
+        help="ex. 32024R0903",
+    )
+                    
+    # Get the parser's attributes as a dictionary
+    parser_dict = st.session_state.parser.__dict__    
+    # Filter out non-serializable attributes
+    serializable_dict = {k: v for k, v in parser_dict.items() if isinstance(v, (str, int, float, bool, list, dict, type(None)))}            
+    # Convert the dictionary to a JSON string            
+    json_data = json.dumps(serializable_dict)
+    
+    if file_to_download:
+        st.download_button(
+            label="Download Parsed Data",
+            data=json_data,
+            file_name=f"{file_to_download}.json",
+            mime="application/json"
+        )
+    else:
+        st.warning("Please enter a valid file name to download the data.")
+    
     if st.session_state.get('data') is not None and not st.session_state['data'].empty:
         if st.button("Proceed to export data"):
             st.switch_page("pages/5_Export.py")

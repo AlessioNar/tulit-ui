@@ -30,7 +30,6 @@ def choose_file():
             f.write(uploaded_file.getbuffer())
         st.success(f"File saved: {file_path}")
         st.session_state.file = file_path
-        st.stop()
     
     # Navigation buttons
     st.write("### Navigation") 
