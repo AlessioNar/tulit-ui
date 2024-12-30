@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import shutil
 
 def display_table(data, table_type="Articles"):
     """Display a table (articles, chapters, or other attributes)."""
@@ -12,25 +13,15 @@ def display_table(data, table_type="Articles"):
     st.write(f"### {table_type} Table")
     st.dataframe(df)
 
-def extract_articles(articles_data, is_paragraph=False):
+def extract_articles(articles_data):
     """Extract and format articles/paragraphs."""
     data_list = []
-    for article in articles_data:
-        if is_paragraph:  # Handle XHTML or Akoma Ntoso format (with paragraphs)
-            for paragraph in article['article_text']:
-                data_list.append({                    
-                    'eId': paragraph['eId'],
-                    'Article eId': article['eId'],
-                    'Article Number': article['article_num'],
-                    'Article Title': article.get('article_title', ''),
-                    'Paragraph Text': paragraph['text']
-                })
-        else:  # Handle Formex format
-            data_list.append({
-                'eId': article['eId'],
-                'Article Number': article['article_num'],
-                'Article Text': article['article_text']
-            })
+    for article in articles_data:                
+        data_list.append({
+            'eId': article['eId'],
+            'Article Number': article['num'],
+            'Article Heading': article['heading']
+        })
     return data_list
 
 def extract_chapters(chapters_data):
@@ -39,30 +30,21 @@ def extract_chapters(chapters_data):
     for chapter in chapters_data:
         data_list.append({
             'eId': chapter['eId'],
-            'Chapter Heading': chapter.get('chapter_heading'),
-            'Chapter Number': chapter.get('chapter_num')
+            'Chapter Heading': chapter.get('heading'),
+            'Chapter Number': chapter.get('num')
         })
     return data_list
 
-def extract_recitals(recitals_data):
+def extract_items(data):
     """Extract and format chapters."""
     data_list = []
-    for recital in recitals_data:
+    for item in data:
         data_list.append({
-            'eId': recital['eId'],
-            'Recital text': recital['recital_text'],
+            'eId': item['eId'],
+            'Row': item['text'],
         })
     return data_list
 
-def extract_citations(citations_data):
-    """Extract and format chapters."""
-    data_list = []
-    for citation in citations_data:
-        data_list.append({
-            'eId': citation['eId'],
-            'Citation text': citation['citation_text']          
-        })
-    return data_list
 
 def view():
     """View Data Page"""
@@ -78,7 +60,6 @@ def view():
         st.stop()
 
     parser = st.session_state.parser  # Retrieve the parser object
-    format_selected = st.session_state.format  # Get selected format
     st.write("### Preface")
     if hasattr(parser, "preface") and parser.preface is not None:
         st.write(getattr(parser, "preface"))  # Display preface if available
@@ -95,9 +76,8 @@ def view():
 
     ## Different views according to the specific items
     if view_option == "Articles":
-        if hasattr(parser, 'articles'):
-            is_paragraph = format_selected in ["XHTML", "Akoma Ntoso"]
-            articles_data = extract_articles(parser.articles, is_paragraph)
+        if hasattr(parser, 'articles'):            
+            articles_data = extract_articles(parser.articles)
             display_table(articles_data, table_type="Articles")
         else:
             st.info("No article data available in this document.")
@@ -109,13 +89,13 @@ def view():
             st.info("No chapters data available in this document.")
     elif view_option == "Recitals":
         if hasattr(parser, 'recitals') and parser.recitals is not None:
-            recitals_data = extract_recitals(parser.recitals)
+            recitals_data = extract_items(parser.recitals)
             display_table(recitals_data, table_type="Recitals")
         else:
             st.info("No recitals data available in this document.")
     elif view_option == "Citations":
         if hasattr(parser, 'citations') and parser.citations is not None:
-            citations_data = extract_citations(parser.citations)
+            citations_data = extract_items(parser.citations)
             display_table(citations_data, table_type="Citations")
         else:
             st.info("No citations data available in this document.")
@@ -123,6 +103,8 @@ def view():
     if st.session_state.get('data') is not None and not st.session_state['data'].empty:
         if st.button("Proceed to export data"):
             st.switch_page("pages/5_Export.py")
+    
+
         
 def main():
     view()
