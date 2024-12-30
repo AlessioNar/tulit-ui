@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 from datetime import datetime
-
+import tempfile
 def choose_file():
     """
     Main Streamlit app for file system navigation and file selection.
@@ -9,23 +9,38 @@ def choose_file():
     
     st.write("# TULIT")
 
-    st.header("Choose a File for Parsing")
+    st.header("Choose a File")
     
+    # Initialize session state for current path
+    if 'temp_dir' not in st.session_state or not st.session_state.temp_dir:
+        st.session_state.temp_dir = tempfile.mkdtemp()
+    
+    if 'current_path' not in st.session_state or not st.session_state.current_path:
+        st.session_state.current_path = st.session_state.temp_dir
+        st.rerun()
+        
     st.sidebar.write(f"**Current Path:** {st.session_state.get('current_path', 'Not set')}")
     st.sidebar.write(f"**Selected File:** {st.session_state.get('file', 'No file selected')}")
 
-        
+    # Provide a way to upload a file to the current directory
+    uploaded_file = st.file_uploader("Upload a file to the current directory")
+    if uploaded_file:
+        file_path = os.path.join(st.session_state.current_path, uploaded_file.name)
+        with open(file_path, "wb") as f:
+            f.write(uploaded_file.getbuffer())
+        st.success(f"File saved: {file_path}")
+        st.session_state.file = file_path
+        st.stop()
+    
     # Navigation buttons
-    st.write("### Navigation")    
+    st.write("### Navigation") 
+    if st.session_state.current_path != st.session_state.temp_dir:
+        if st.button("⬆️ Go Up"):
+            parent_dir = os.path.dirname(st.session_state.current_path)
+            if parent_dir != st.session_state.current_path:  # Check if we are not at the root directory
+                st.session_state.current_path = parent_dir
+                st.rerun()
 
-    # Initialize session state for current path
-    if 'current_path' not in st.session_state:
-        st.session_state.current_path = os.path.join(os.path.dirname(__file__), '..', 'database', 'data')
-        st.rerun()
-    else:        
-        if st.button("Go Up"):
-            st.session_state.current_path = os.path.dirname(st.session_state.current_path)
-            st.rerun()
     # Display current directory
     st.write(f"**Current Directory:** `{st.session_state.current_path}`")
     

@@ -33,9 +33,8 @@ def download():
         eli = st.text_input("Please introduce the ELI number of the document you want to download", placeholder="ex. http://data.legilux.public.lu/eli/etat/leg/loi/2006/07/31/n2/jo")
         
     # Temporary file preparation
-    if 'temp_dir' not in st.session_state or not st.session_state.temp_dir:
-        temp_dir = tempfile.mkdtemp()
-        st.session_state.temp_dir = temp_dir
+    if 'temp_dir' not in st.session_state or not st.session_state.temp_dir:        
+        st.session_state.temp_dir = tempfile.mkdtemp()
             
     st.write(st.session_state.temp_dir)
     
