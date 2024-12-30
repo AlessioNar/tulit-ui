@@ -52,6 +52,8 @@ def extract_items(data):
 
 def view():
     """View Data Page"""
+    
+    st.write("# TULIT")
     st.title("Visualise")
     
     # Sidebar info

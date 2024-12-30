@@ -14,13 +14,15 @@ def export():
     """
     st.sidebar.write(f"**Selected Format:** {st.session_state.get('format', 'Not selected')}")
     st.sidebar.write(f"**Selected File:** {st.session_state.get('file', 'No file selected')}")
-
+    
+    st.write("# TULIT")
+    
     st.title("Export data")
     # Check for data in session state
     if 'data' not in st.session_state:
         st.warning("No data available to export")
-        return
-    
+        st.stop()
+            
     # Try to identify the data source
     # Assuming data is a list of dictionaries or a DataFrame
     data = st.session_state.data 
