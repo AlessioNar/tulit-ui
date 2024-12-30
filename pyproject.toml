@@ -3,7 +3,7 @@ name = "tulit-ui"
 version = "0.0.1"
 description = ""
 authors = ["AlessioNar <alessio.nardin@gmail.com>"]
-license = "EUPL1.2"
+license = "EUPL 1.2"
 readme = "README.md"
 package-mode = false
 
@@ -11,7 +11,7 @@ package-mode = false
 python = "^3.11"
 pandas = "^2.2.3"
 streamlit = "^1.39.0"
-tulit = "^0.0.6"
+tulit = "0.0.7"
 
 
 [build-system]

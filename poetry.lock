@@ -1000,20 +1000,21 @@ files = [
 
 [[package]]
 name = "narwhals"
-version = "1.19.1"
+version = "1.20.1"
 description = "Extremely lightweight compatibility layer between dataframe libraries"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "narwhals-1.19.1-py3-none-any.whl", hash = "sha256:72476dcc95f1d3f2c0c1f047cdd4879346b2871fe13d1223025466d8a3dcaea4"},
-    {file = "narwhals-1.19.1.tar.gz", hash = "sha256:e597e7ed9da42ffb2c80b21e174817b27592a8570edea8c46c90a726e3b796af"},
+    {file = "narwhals-1.20.1-py3-none-any.whl", hash = "sha256:77fc10fed31534a4ecf0c5e1e091c91c454cb2fa73937f36be3fcb0c2dfdabc6"},
+    {file = "narwhals-1.20.1.tar.gz", hash = "sha256:ffc6a44c1bc651531198c5f7fc38d349dff898ecfe51c1ef96aaaf429ec4dc19"},
 ]
 
 [package.extras]
-cudf = ["cudf (>=24.12.0)"]
+cudf = ["cudf (>=24.10.0)"]
 dask = ["dask[dataframe] (>=2024.7)"]
-dev = ["covdefaults", "dask[dataframe]", "duckdb", "hypothesis", "hypothesis[numpy]", "pandas", "polars", "pyarrow", "pyarrow-stubs", "pyspark", "pytest", "pytest-cov", "pytest-env", "pytest-randomly", "scikit-learn", "tqdm", "typing-extensions"]
+dev = ["covdefaults", "duckdb", "hypothesis[numpy]", "pandas", "polars", "pre-commit", "pyarrow", "pyarrow-stubs", "pytest", "pytest-cov", "pytest-env", "pytest-randomly", "tqdm", "typing-extensions"]
 docs = ["black", "duckdb", "jinja2", "markdown-exec[ansi]", "mkdocs", "mkdocs-autorefs", "mkdocs-material", "mkdocstrings[python]", "pandas", "polars (>=1.0.0)", "pyarrow"]
+extra = ["dask[dataframe]", "modin", "pyspark", "scikit-learn"]
 modin = ["modin"]
 pandas = ["pandas (>=0.25.3)"]
 polars = ["polars (>=0.20.3)"]
@@ -2255,13 +2256,13 @@ telegram = ["requests"]
 
 [[package]]
 name = "tulit"
-version = "0.0.6"
+version = "0.0.7"
 description = "TULIT - The Universal Legal Informatics Toolkit, is set of legal informatics utilities collected in a Python package that focuses on the retrieval of legal data and metadata from official sources in the EU, and their transformation in pythonic data structures"
 optional = false
 python-versions = "<4.0,>=3.11"
 files = [
-    {file = "tulit-0.0.6-py3-none-any.whl", hash = "sha256:a6ced4b7dafd8f59864e8db4ce55a04de29549e7c809d4c0869ac151aa94fba7"},
-    {file = "tulit-0.0.6.tar.gz", hash = "sha256:9bbe18c67818e1e8b805d7ad791b6fded570a8d8bf567e1775dbe66c308f92fd"},
+    {file = "tulit-0.0.7-py3-none-any.whl", hash = "sha256:f56a44fc6dc651ec772c62c7fdb0446980746414a5f08f1df87bc679e3659d63"},
+    {file = "tulit-0.0.7.tar.gz", hash = "sha256:27916621f5abad956d211b6d9095b564310b4c3b1172f0ec1b5bc3330faebac6"},
 ]
 
 [package.dependencies]
@@ -2488,4 +2489,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "442a0f19286b506eae752240bdbd1b203ecf478852b65a3da3ddbfe1bf92f3b0"
+content-hash = "65069c7a96ca68d5ace9e334667d2ccd47272c104027afd5c554cf7d2795b402"
