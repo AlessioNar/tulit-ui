@@ -24,8 +24,8 @@ def parse_file(parser_cls, file_path):
     finally:
         sys.stdout = old_stdout
 
-    # Print the captured output
-    st.write(output)
+    # Prettify the captured output
+    st.code(output, language='python')
     return parser
 
 def parse():
