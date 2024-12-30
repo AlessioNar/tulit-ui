@@ -24,10 +24,8 @@ def main():
             - Parse legal documents in various standard formats (Akoma Ntoso, FORMEX4, and XHTML)
             
             **👈 Select a demo from the sidebar** to see some examples
-            of what ULIT can do!
+            of what TULIT can do!
             
-            ### Want to learn more?
-            Explore the tabs above to find out more about the project, how to contribute, and how to get in touch with us.
             """
         )
 
@@ -83,7 +81,10 @@ def main():
             If you have any questions, suggestions, or feedback, feel free to reach out. 
             
             ### Contact Information            
-            - **GitHub**: [TULIT Repository](https://github.com/AlessioNar/tulit)
+            - [Github TULIT repository](https://github.com/AlessioNar/tulit)
+            - [GitHub TULIT-UI repository](https://github.com/AlessioNar/tulit-ui)
+            - [LinkedIn](https://www.linkedin.com/in/alessio-nardin-236a2515a/)
+            - [Personal Website](https://alessionardin.eu)
         
             """
         )
