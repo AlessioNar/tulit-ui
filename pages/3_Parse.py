@@ -4,14 +4,28 @@ import tempfile
 import streamlit as st
 
 # Dummy parsers - replace these imports with your actual parsers
-from tulit.parsers.formex import Formex4Parser
-from tulit.parsers.html import HTMLParser
-from tulit.parsers.akomantoso import AkomaNtosoParser
+from tulit.parsers.xml.formex import Formex4Parser
+from tulit.parsers.html.cellar import CellarHTMLParser
+from tulit.parsers.xml.akomantoso import AkomaNtosoParser
+import io
+import sys
 
 def parse_file(parser_cls, file_path):
     """Parse the file using the given parser class."""
     parser = parser_cls()
-    parser.parse(file_path)
+    # Capture the output of the parse method
+    old_stdout = sys.stdout
+    new_stdout = io.StringIO()
+    sys.stdout = new_stdout
+
+    try:
+        parser.parse(file_path)
+        output = new_stdout.getvalue()
+    finally:
+        sys.stdout = old_stdout
+
+    # Print the captured output
+    st.write(output)
     return parser
 
 def parse():
@@ -31,14 +45,8 @@ def parse():
         st.error("No valid file selected. Please upload a file.")
         st.stop()
 
-    # Temporary file preparation
-    temp_dir = tempfile.mkdtemp()
-    temp_file_path = os.path.join(temp_dir, os.path.basename(entry))
-    try:
-        shutil.copy(entry, temp_file_path)
-    except Exception as e:
-        st.error(f"Error copying file: {e}")
-        return
+    temp_dir = st.session_state.get('temp_dir')
+    file = st.session_state.get('file')
 
     # File format selection
     format_options = ["Formex 4", "XHTML", "Akoma Ntoso"]
@@ -51,16 +59,16 @@ def parse():
         try:
             # Call the appropriate parser based on format @todo improve error handling
             if format_selected == "Formex 4":
-                parser = parse_file(Formex4Parser, temp_file_path)
+                parser = parse_file(Formex4Parser, file)
             elif format_selected == "XHTML":
-                parser = parse_file(HTMLParser, temp_file_path)
+                parser = parse_file(CellarHTMLParser, file)
             elif format_selected == "Akoma Ntoso":
-                parser = parse_file(AkomaNtosoParser, temp_file_path)
+                parser = parse_file(AkomaNtosoParser, file)
             else:
                 raise ValueError("Invalid format selected.")
 
             # Verify the parser output
-            if parser.valid is None or parser.valid is False:
+            if parser.valid is False:
                 # Print the error message prettified                
                 for error in parser.validation_errors:
                     st.error(f"Validation Error: {error}")
@@ -79,9 +87,6 @@ def parse():
     # Proceed to view results
     if st.session_state.get('parser') and st.button("Proceed to View Results"):
         st.switch_page("pages/4_Select_data.py")
-
-    # Cleanup temporary directory
-    shutil.rmtree(temp_dir, ignore_errors=True)
 
 def main():
     if "parser" not in st.session_state:
