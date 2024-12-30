@@ -43,6 +43,7 @@ def main():
             As of now, TULIT supports the download of data from the following data sources:
             - [Cellar](https://op.europa.eu/en/web/cellar#:~:text=Cellar%20is%20the%20common%20data%20repository%20of%20the,order%20to%20be%20used%20by%20humans%20and%20machines.), the Semantic Repository of the Publications Office of the EU
             - [Normattiva](https://www.normattiva.it/), the Italian official legal database
+            - [Legilux](https://legilux.public.lu/), the official legal database of Luxembourg
             
             Additionally, TULIT provides parsing capabilities for legal documents in the following formats:
             - Akoma Ntoso
