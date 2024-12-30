@@ -1,6 +1,4 @@
 import os
-import shutil
-import tempfile
 import streamlit as st
 
 # Dummy parsers - replace these imports with your actual parsers
@@ -45,7 +43,6 @@ def parse():
         st.error("No valid file selected. Please upload a file.")
         st.stop()
 
-    temp_dir = st.session_state.get('temp_dir')
     file = st.session_state.get('file')
 
     # File format selection
@@ -67,8 +64,8 @@ def parse():
             else:
                 raise ValueError("Invalid format selected.")
 
-            # Verify the parser output
-            if parser.valid is False:
+            # Verify the parser output            
+            if hasattr(parser, 'valid') and (parser.valid is False):
                 # Print the error message prettified                
                 for error in parser.validation_errors:
                     st.error(f"Validation Error: {error}")
@@ -79,6 +76,7 @@ def parse():
             # Store parsed data in session state
             st.session_state.parser = parser
             st.success("File parsed successfully!")
+                        
 
         except Exception as e:
             # Display the error message
