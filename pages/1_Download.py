@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
 from tulit.sparql import send_sparql_query
-from tulit.download.cellar import CellarDownloader
-from tulit.download.normattiva import NormattivaDownloader
-from tulit.download.legilux import LegiluxDownloader
+from tulit.download.cellar import CellarClient
+from tulit.download.normattiva import NormattivaClient
+from tulit.download.legilux import LegiluxClient
 import tempfile
 import os
 
@@ -64,7 +64,7 @@ def handle_eu_publications_office(celex, temp_dir):
     
     results = send_sparql_query(query_file, celex)
     format_dir = 'formex' if st.session_state.format == "Formex 4" else 'html'
-    downloader = CellarDownloader(download_dir=os.path.join(temp_dir, f'database/data/{format_dir}'), log_dir='./database/metadata/logs')
+    downloader = CellarClient(download_dir=os.path.join(temp_dir, f'database/data/{format_dir}'), log_dir='./database/metadata/logs')
     
     downloaded_document_paths = downloader.download(
         results, format='fmx4' if st.session_state.format == "Formex 4" else 'xhtml'
@@ -73,13 +73,13 @@ def handle_eu_publications_office(celex, temp_dir):
 
 def handle_normattiva(publication_date, codice_redazionale, temp_dir):
     st.write(f'Searching and downloading file from Normattiva with Codice Redazionale {codice_redazionale} and published on {publication_date}')
-    downloader = NormattivaDownloader(download_dir=os.path.join(temp_dir, 'database/data/akn/italy'), log_dir='./database/metadata/logs')
+    downloader = NormattivaClient(download_dir=os.path.join(temp_dir, 'database/data/akn/italy'), log_dir='./database/metadata/logs')
     downloaded_document_paths = downloader.download(publication_date, codice_redazionale)
     display_download_results(downloaded_document_paths)
 
 def handle_legilux(eli, temp_dir):
     st.write(f'Searching and downloading file from Legilux with ELI {eli}')
-    downloader = LegiluxDownloader(download_dir=os.path.join(temp_dir, 'database/data/akn/luxembourg'), log_dir='./database/metadata/logs')
+    downloader = LegiluxClient(download_dir=os.path.join(temp_dir, 'database/data/akn/luxembourg'), log_dir='./database/metadata/logs')
     downloaded_document_paths = downloader.download(eli)
     display_download_results(downloaded_document_paths)
 
