@@ -8,6 +8,16 @@ from tulit.parsers.xml.akomantoso import AkomaNtosoParser
 import io
 import sys
 
+def parse_document(file_path):
+    """
+    Parse a legal document.
+    
+    Args:
+        file_path (str): The path to the document to parse.
+    """
+    # Code to parse the document
+    st.write(f"Parsing document at {file_path}")
+
 def parse_file(parser_cls, file_path):
     """Parse the file using the given parser class."""
     parser = parser_cls()
@@ -19,12 +29,12 @@ def parse_file(parser_cls, file_path):
     try:
         parser.parse(file_path)
         output = new_stdout.getvalue()
+        
     finally:
         sys.stdout = old_stdout
 
     # Prettify the captured output
-    st.code(output, language='python')
-    return parser
+    return parser, output
 
 def parse():
     """Parser Page"""
@@ -56,32 +66,46 @@ def parse():
         try:
             # Call the appropriate parser based on format @todo improve error handling
             if format_selected == "Formex 4":
-                parser = parse_file(Formex4Parser, file)
+                parser, output = parse_file(Formex4Parser, file)
+                
             elif format_selected == "XHTML":
-                parser = parse_file(CellarHTMLParser, file)
+                parser, output = parse_file(CellarHTMLParser, file)
+            
             elif format_selected == "Akoma Ntoso":
-                parser = parse_file(AkomaNtosoParser, file)
+                parser, output = parse_file(AkomaNtosoParser, file)
+            
+                
             else:
                 raise ValueError("Invalid format selected.")
 
+            # Store parsed data in session state
+            st.session_state.parser = parser
+            st.session_state.output = output
+            
             # Verify the parser output            
-            if hasattr(parser, 'valid') and (parser.valid is False):
+            if (hasattr(parser, "valid")) and (parser.valid is False):
                 # Print the error message prettified                
                 for error in parser.validation_errors:
                     st.error(f"Validation Error: {error}")
                     
                 raise RuntimeError("Parser failed or returned invalid data.")
-            
 
-            # Store parsed data in session state
-            st.session_state.parser = parser
             st.success("File parsed successfully!")
-                        
 
+
+            
+            
+                        
         except Exception as e:
             # Display the error message
             st.error(f"Error during parsing: {e}")
 
+    if st.button("Show output"):
+        if 'parser' in st.session_state and 'output' in st.session_state:
+            st.code(f"Parser output: {st.session_state.output}")
+        else:
+            st.error("No parser output available.")
+            
     # Proceed to view results
     if st.session_state.get('parser') and st.button("Proceed to View Results"):
         st.switch_page("pages/4_Visualise.py")

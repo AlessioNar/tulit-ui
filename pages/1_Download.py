@@ -7,6 +7,8 @@ from tulit.download.legilux import LegiluxClient
 import tempfile
 import os
 
+from config import Config
+
 def download():
     
     st.write("# TULIT")
@@ -18,9 +20,13 @@ def download():
     source = st.sidebar.selectbox("Choose the source of the file download:", ["Publications Office of the EU", "Normattiva", "Legilux"])
 
     if source == "Publications Office of the EU":
+        eli = st.text_input(
+            "Please introduce the ELI number of the document you want to download",
+            placeholder="ex. http://"
+        )
         celex = st.text_input(
             "Please introduce the CELEX number of the document you want to download",
-            placeholder="ex. 32024R0903"
+            placeholder="ex. 32024R0903", value='32024R0903'
         )
         format_options = ["Formex 4", "XHTML"]
         st.session_state.format = st.selectbox("Select the format of the document", format_options)
@@ -43,7 +49,8 @@ def download():
             if not celex:
                 st.error("Please enter a CELEX number")
                 st.stop()
-            handle_eu_publications_office(celex, st.session_state.temp_dir)
+            if celex:
+                handle_eu_publications_office(celex, st.session_state.temp_dir)
         elif source == "Normattiva":
             if not publication_date or not codice_redazionale:
                 st.error("Please enter the publication date and the Codice Redazionale")
@@ -54,6 +61,9 @@ def download():
                 st.error("Please enter an ELI number")
                 st.stop()
             handle_legilux(eli, st.session_state.temp_dir)
+    
+    if st.button("Go to the temporary database"):
+        st.switch_page("pages/2_Choose_file.py")
 
 def handle_eu_publications_office(celex, temp_dir):
     if celex not in st.session_state:
@@ -87,6 +97,9 @@ def display_download_results(downloaded_document_paths):
     st.session_state.documents = downloaded_document_paths
     st.write(f'{len(st.session_state.documents)} documents downloaded in {st.session_state.documents}')
     st.session_state.file = st.session_state.documents
+    
+    #st.button("Go to the temporary database"):
+    #st.switch_page("pages/2_Choose_file.py")
 
 
 def main():

@@ -12,6 +12,7 @@ python = "^3.11"
 pandas = "^2.2.3"
 streamlit = "^1.39.0"
 tulit = "^0.0.9"
+streamlit-agraph = "^0.0.45"
 
 
 [build-system]

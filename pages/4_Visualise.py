@@ -20,7 +20,7 @@ def extract_articles(articles_data):
         for child in article.get('children', []):            
             data_list.append({
                 'eId': child['eId'],
-                'Child': child['text'],
+                'text': child['text'],
                 'Article eId': article['eId'],
                 'Article Number': article['num'],
                 'Article Heading': article['heading'],
@@ -132,8 +132,8 @@ def view():
         st.warning("Please enter a valid file name to download the data.")
     
     if st.session_state.get('data') is not None and not st.session_state['data'].empty:
-        if st.button("Proceed to export data"):
-            st.switch_page("pages/5_Export.py")
+        if st.button("Proceed to annotate data"):
+            st.switch_page("pages/5_Annotate.py")
     
 
         

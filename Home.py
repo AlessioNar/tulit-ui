@@ -2,10 +2,7 @@ import streamlit as st
 import pandas as pd
 
 def main():
-    st.set_page_config(
-        page_title="TULIT - The Universal Legal Informatics Toolkit",
-        page_icon="👋",
-    )
+    st.set_page_config(page_title="TULIT - The Universal Legal Informatics Toolkit", page_icon="👋")
 
     st.write("# TULIT")
     st.write("## The Universal Legal Informatics Toolkit 👋")

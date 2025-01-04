@@ -1,0 +1,26 @@
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix eli: <http://data.europa.eu/eli/ontology#> .
+
+<https://data.europa.eu/eli/reg/2024/900/oj/001/001.001> a eli:LegalResourceSubdivision ;
+    eli:language "en" ;
+    eli:type_subdivision "Paragraph" ;
+    dct:hasAnnotation "1.This Regulation lays down measures that promote the cross-border interoperability of trans-European digital public services, thus contributing to the interoperability of the underlying network and information systems by establishing common rules and a governance framework." ;
+    dct:isPartOf <https://data.europa.eu/eli/reg/2024/900/oj/> .
+
+<https://data.europa.eu/eli/reg/2024/900/oj/001/001.002> a eli:LegalResourceSubdivision ;
+    eli:language "en" ;
+    eli:type_subdivision "Paragraph" ;
+    dct:hasAnnotation "2.This Regulation applies to Union entities and public sector bodies that regulate, provide, manage or implement trans-European digital public services." ;
+    dct:isPartOf <https://data.europa.eu/eli/reg/2024/900/oj/> .
+
+<https://data.europa.eu/eli/reg/2024/900/oj/001/001.003> a eli:LegalResourceSubdivision ;
+    eli:language "en" ;
+    eli:type_subdivision "Paragraph" ;
+    dct:hasAnnotation "3.This Regulation applies without prejudice to the competence of Member States to define what constitutes public services or to their ability to establish procedural rules for or to provide, manage or implement those services." ;
+    dct:isPartOf <https://data.europa.eu/eli/reg/2024/900/oj/> .
+
+<https://data.europa.eu/eli/reg/2024/900/oj/> a eli:LegalResource ;
+    eli:language "en" ;
+    eli:type_document "Law" ;
+    dct:title "Regulation (EU) 2024/903 of the European Parliament and of the Council of 13 March 2024 laying down measures for a high level of public sector interoperability across the Union (Interoperable Europe Act)" .
+
