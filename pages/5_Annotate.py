@@ -47,7 +47,7 @@ def view():
     st.write("### Preface")
     st.write(st.session_state.parser.preface)
 
-    selected_data = display_table_with_filters(data)
+    selected_data = display_table_with_filters(data, table_type="Articles")
 
     
     

@@ -10,6 +10,7 @@ def display_table(data, table_type="Articles"):
 
     df = pd.DataFrame(data)
     st.session_state.data = df  # Store the table in session state for persistence
+    st.session_state.table_type = table_type
     st.write(f"### {table_type} Table")
     st.dataframe(df)
 
@@ -54,7 +55,7 @@ def view():
     """View Data Page"""
     
     st.write("# TULIT")
-    st.title("Visualise")
+    st.title("Export and explore")
     
     # Sidebar info
     st.sidebar.write(f"**Selected Format:** {st.session_state.get('format', 'Not selected')}")    
@@ -64,6 +65,31 @@ def view():
     if 'parser' not in st.session_state or not st.session_state.parser:
         st.error("No parsed data found. Please parse a file first.")
         st.stop()
+    
+    st.write("## Export data in JSON format")
+    
+    # Text input for the name of the file
+    file_to_download = st.text_input(
+        "Name of the file",
+        help="ex. 32024R0903",
+    )
+                    
+    # Get the parser's attributes as a dictionary
+    parser_dict = st.session_state.parser.__dict__    
+    # Filter out non-serializable attributes
+    serializable_dict = {k: v for k, v in parser_dict.items() if isinstance(v, (str, int, float, bool, list, dict, type(None)))}            
+    # Convert the dictionary to a JSON string            
+    json_data = json.dumps(serializable_dict)
+    
+    if file_to_download:
+        st.download_button(
+            label="Download Parsed Data",
+            data=json_data,
+            file_name=f"{file_to_download}.json",
+            mime="application/json"
+        )
+    else:
+        st.warning("Please enter a valid file name to download the data.")
         
     parser = st.session_state.parser  # Retrieve the parser object
     st.write("### Preface")
@@ -105,31 +131,6 @@ def view():
             display_table(citations_data, table_type="Citations")
         else:
             st.info("No citations data available in this document.")
-    
-    st.write("## Export Data")
-    
-    # Text input for the name of the file
-    file_to_download = st.text_input(
-        "Name of the file",
-        help="ex. 32024R0903",
-    )
-                    
-    # Get the parser's attributes as a dictionary
-    parser_dict = st.session_state.parser.__dict__    
-    # Filter out non-serializable attributes
-    serializable_dict = {k: v for k, v in parser_dict.items() if isinstance(v, (str, int, float, bool, list, dict, type(None)))}            
-    # Convert the dictionary to a JSON string            
-    json_data = json.dumps(serializable_dict)
-    
-    if file_to_download:
-        st.download_button(
-            label="Download Parsed Data",
-            data=json_data,
-            file_name=f"{file_to_download}.json",
-            mime="application/json"
-        )
-    else:
-        st.warning("Please enter a valid file name to download the data.")
     
     if st.session_state.get('data') is not None and not st.session_state['data'].empty:
         if st.button("Proceed to annotate data"):
