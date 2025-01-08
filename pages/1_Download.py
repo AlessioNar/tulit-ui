@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
 from tulit.sparql import send_sparql_query
-from tulit.download.cellar import CellarClient
-from tulit.download.normattiva import NormattivaClient
-from tulit.download.legilux import LegiluxClient
+from tulit.client.cellar import CellarClient
+from tulit.client.normattiva import NormattivaClient
+from tulit.client.legilux import LegiluxClient
 import tempfile
 import os
 
