@@ -1550,17 +1550,17 @@ files = [
 
 [[package]]
 name = "tulit"
-version = "0.0.9"
+version = "0.1.0"
 description = "TULIT - The Universal Legal Informatics Toolkit, is set of legal informatics utilities collected in a Python package that focuses on the retrieval of legal data and metadata from official sources in the EU, and their transformation in pythonic data structures"
 optional = false
 python-versions = "<4.0,>=3.11"
 files = [
-    {file = "tulit-0.0.9-py3-none-any.whl", hash = "sha256:756f327ae9cb346f9f10dfbcc300e41b15a3f1f5ece25c4d6616ffb679adab99"},
-    {file = "tulit-0.0.9.tar.gz", hash = "sha256:b1c756b9ebcb03fdda72c6472000c83704fc5d4e197003105eb38c6adc29eb68"},
+    {file = "tulit-0.1.0-py3-none-any.whl", hash = "sha256:20cd7285d0c8bf2b8bf462bcb28893e1d9b84e5ed2e03027b5e6a807ec6fb099"},
+    {file = "tulit-0.1.0.tar.gz", hash = "sha256:7eb39d8786f3995c6db91dc0944f4d46422283369cee6eb3f33cf6fcb690d5ba"},
 ]
 
 [package.dependencies]
-beautifulsoup4 = ">=4.12.3,<5.0.0"
+beautifulsoup4 = ">=4.9.3,<5.0.0"
 chardet = ">=5.2.0,<6.0.0"
 coverage = ">=7.6.9,<8.0.0"
 genbadge = ">=1.1.1,<2.0.0"
@@ -1655,4 +1655,4 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "4ef0f13d54668dcc9d72559dd8ace80f11eaa5d65fab597caf380938c84e2263"
+content-hash = "97331fa78ff940b35695c49a14753093729147705a9307c338ccc058830810a6"
